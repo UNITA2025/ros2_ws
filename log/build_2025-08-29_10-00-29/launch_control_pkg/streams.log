@@ -1,0 +1,23 @@
+[0.727s] Invoking command in '/home/unita/ros2_ws/src/launch_control_pkg': PYTHONPATH=/home/unita/ros2_ws/build/launch_control_pkg/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/unita/ros2_ws/install/launch_control_pkg/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/launch_control_pkg build --build-base /home/unita/ros2_ws/build/launch_control_pkg/build install --record /home/unita/ros2_ws/build/launch_control_pkg/install.log --single-version-externally-managed install_data
+[0.884s] running egg_info
+[0.884s] writing ../../build/launch_control_pkg/launch_control_pkg.egg-info/PKG-INFO
+[0.885s] writing dependency_links to ../../build/launch_control_pkg/launch_control_pkg.egg-info/dependency_links.txt
+[0.885s] writing entry points to ../../build/launch_control_pkg/launch_control_pkg.egg-info/entry_points.txt
+[0.885s] writing requirements to ../../build/launch_control_pkg/launch_control_pkg.egg-info/requires.txt
+[0.885s] writing top-level names to ../../build/launch_control_pkg/launch_control_pkg.egg-info/top_level.txt
+[0.885s] reading manifest file '../../build/launch_control_pkg/launch_control_pkg.egg-info/SOURCES.txt'
+[0.885s] writing manifest file '../../build/launch_control_pkg/launch_control_pkg.egg-info/SOURCES.txt'
+[0.885s] running build
+[0.886s] running install
+[0.886s] running install_data
+[0.886s] running install_egg_info
+[0.887s] removing '/home/unita/ros2_ws/install/launch_control_pkg/lib/python3.10/site-packages/launch_control_pkg-0.0.0-py3.10.egg-info' (and everything under it)
+[0.887s] Copying ../../build/launch_control_pkg/launch_control_pkg.egg-info to /home/unita/ros2_ws/install/launch_control_pkg/lib/python3.10/site-packages/launch_control_pkg-0.0.0-py3.10.egg-info
+[0.888s] running install_scripts
+[0.900s] Installing ErpSerialHandler_pub script to /home/unita/ros2_ws/install/launch_control_pkg/lib/launch_control_pkg
+[0.901s] Installing erp_control script to /home/unita/ros2_ws/install/launch_control_pkg/lib/launch_control_pkg
+[0.901s] Installing global_path_pub script to /home/unita/ros2_ws/install/launch_control_pkg/lib/launch_control_pkg
+[0.901s] Installing gps_map_pub script to /home/unita/ros2_ws/install/launch_control_pkg/lib/launch_control_pkg
+[0.901s] Installing local_pub script to /home/unita/ros2_ws/install/launch_control_pkg/lib/launch_control_pkg
+[0.901s] writing list of installed files to '/home/unita/ros2_ws/build/launch_control_pkg/install.log'
+[0.917s] Invoked command in '/home/unita/ros2_ws/src/launch_control_pkg' returned '0': PYTHONPATH=/home/unita/ros2_ws/build/launch_control_pkg/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/unita/ros2_ws/install/launch_control_pkg/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/launch_control_pkg build --build-base /home/unita/ros2_ws/build/launch_control_pkg/build install --record /home/unita/ros2_ws/build/launch_control_pkg/install.log --single-version-externally-managed install_data

@@ -1,0 +1,41 @@
+running egg_info
+creating ../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info
+writing ../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info/PKG-INFO
+writing dependency_links to ../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info/dependency_links.txt
+writing entry points to ../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info/entry_points.txt
+writing requirements to ../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info/requires.txt
+writing top-level names to ../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info/top_level.txt
+writing manifest file '../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info/SOURCES.txt'
+reading manifest file '../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info/SOURCES.txt'
+writing manifest file '../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/unita/ros2_ws/build/perception_yolov8_pkg/build
+creating /home/unita/ros2_ws/build/perception_yolov8_pkg/build/lib
+creating /home/unita/ros2_ws/build/perception_yolov8_pkg/build/lib/perception_yolov8_pkg
+copying perception_yolov8_pkg/yolov8_node.py -> /home/unita/ros2_ws/build/perception_yolov8_pkg/build/lib/perception_yolov8_pkg
+copying perception_yolov8_pkg/cam_publisher_node.py -> /home/unita/ros2_ws/build/perception_yolov8_pkg/build/lib/perception_yolov8_pkg
+copying perception_yolov8_pkg/__init__.py -> /home/unita/ros2_ws/build/perception_yolov8_pkg/build/lib/perception_yolov8_pkg
+running install
+running install_lib
+creating /home/unita/ros2_ws/install/perception_yolov8_pkg/lib/python3.10/site-packages/perception_yolov8_pkg
+copying /home/unita/ros2_ws/build/perception_yolov8_pkg/build/lib/perception_yolov8_pkg/yolov8_node.py -> /home/unita/ros2_ws/install/perception_yolov8_pkg/lib/python3.10/site-packages/perception_yolov8_pkg
+copying /home/unita/ros2_ws/build/perception_yolov8_pkg/build/lib/perception_yolov8_pkg/cam_publisher_node.py -> /home/unita/ros2_ws/install/perception_yolov8_pkg/lib/python3.10/site-packages/perception_yolov8_pkg
+copying /home/unita/ros2_ws/build/perception_yolov8_pkg/build/lib/perception_yolov8_pkg/__init__.py -> /home/unita/ros2_ws/install/perception_yolov8_pkg/lib/python3.10/site-packages/perception_yolov8_pkg
+byte-compiling /home/unita/ros2_ws/install/perception_yolov8_pkg/lib/python3.10/site-packages/perception_yolov8_pkg/yolov8_node.py to yolov8_node.cpython-310.pyc
+byte-compiling /home/unita/ros2_ws/install/perception_yolov8_pkg/lib/python3.10/site-packages/perception_yolov8_pkg/cam_publisher_node.py to cam_publisher_node.cpython-310.pyc
+byte-compiling /home/unita/ros2_ws/install/perception_yolov8_pkg/lib/python3.10/site-packages/perception_yolov8_pkg/__init__.py to __init__.cpython-310.pyc
+running install_data
+creating /home/unita/ros2_ws/install/perception_yolov8_pkg/share/ament_index
+creating /home/unita/ros2_ws/install/perception_yolov8_pkg/share/ament_index/resource_index
+creating /home/unita/ros2_ws/install/perception_yolov8_pkg/share/ament_index/resource_index/packages
+copying resource/perception_yolov8_pkg -> /home/unita/ros2_ws/install/perception_yolov8_pkg/share/ament_index/resource_index/packages
+copying package.xml -> /home/unita/ros2_ws/install/perception_yolov8_pkg/share/perception_yolov8_pkg
+creating /home/unita/ros2_ws/install/perception_yolov8_pkg/share/perception_yolov8_pkg/launch
+copying launch/multi_camera_yolov8.launch.py -> /home/unita/ros2_ws/install/perception_yolov8_pkg/share/perception_yolov8_pkg/launch
+running install_egg_info
+Copying ../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info to /home/unita/ros2_ws/install/perception_yolov8_pkg/lib/python3.10/site-packages/perception_yolov8_pkg-0.0.0-py3.10.egg-info
+running install_scripts
+Installing image_publisher_node script to /home/unita/ros2_ws/install/perception_yolov8_pkg/lib/perception_yolov8_pkg
+Installing yolov8_node script to /home/unita/ros2_ws/install/perception_yolov8_pkg/lib/perception_yolov8_pkg
+writing list of installed files to '/home/unita/ros2_ws/build/perception_yolov8_pkg/install.log'

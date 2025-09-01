@@ -1,0 +1,13 @@
+// generated from rosidl_adapter/resource/msg.idl.em
+// with input from interfaces_control_pkg/msg/ConeInfoArray.msg
+// generated code does not contain a copyright notice
+
+#include "interfaces_control_pkg/msg/ConeInfo.idl"
+
+module interfaces_control_pkg {
+  module msg {
+    struct ConeInfoArray {
+      sequence<interfaces_control_pkg::msg::ConeInfo> cones;
+    };
+  };
+};

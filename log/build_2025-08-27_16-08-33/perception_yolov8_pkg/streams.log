@@ -1,0 +1,22 @@
+[0.965s] Invoking command in '/home/unita/ros2_ws/src/perception_yolov8_pkg': PYTHONPATH=/home/unita/ros2_ws/build/perception_yolov8_pkg/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/unita/ros2_ws/install/perception_yolov8_pkg/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/perception_yolov8_pkg build --build-base /home/unita/ros2_ws/build/perception_yolov8_pkg/build install --record /home/unita/ros2_ws/build/perception_yolov8_pkg/install.log --single-version-externally-managed install_data
+[1.121s] running egg_info
+[1.121s] writing ../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info/PKG-INFO
+[1.122s] writing dependency_links to ../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info/dependency_links.txt
+[1.122s] writing entry points to ../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info/entry_points.txt
+[1.122s] writing requirements to ../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info/requires.txt
+[1.122s] writing top-level names to ../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info/top_level.txt
+[1.123s] reading manifest file '../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info/SOURCES.txt'
+[1.123s] writing manifest file '../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info/SOURCES.txt'
+[1.123s] running build
+[1.123s] running build_py
+[1.124s] running install
+[1.124s] running install_lib
+[1.124s] running install_data
+[1.124s] running install_egg_info
+[1.125s] removing '/home/unita/ros2_ws/install/perception_yolov8_pkg/lib/python3.10/site-packages/perception_yolov8_pkg-0.0.0-py3.10.egg-info' (and everything under it)
+[1.126s] Copying ../../build/perception_yolov8_pkg/perception_yolov8_pkg.egg-info to /home/unita/ros2_ws/install/perception_yolov8_pkg/lib/python3.10/site-packages/perception_yolov8_pkg-0.0.0-py3.10.egg-info
+[1.126s] running install_scripts
+[1.138s] Installing image_publisher_node script to /home/unita/ros2_ws/install/perception_yolov8_pkg/lib/perception_yolov8_pkg
+[1.138s] Installing yolov8_node script to /home/unita/ros2_ws/install/perception_yolov8_pkg/lib/perception_yolov8_pkg
+[1.138s] writing list of installed files to '/home/unita/ros2_ws/build/perception_yolov8_pkg/install.log'
+[1.156s] Invoked command in '/home/unita/ros2_ws/src/perception_yolov8_pkg' returned '0': PYTHONPATH=/home/unita/ros2_ws/build/perception_yolov8_pkg/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/unita/ros2_ws/install/perception_yolov8_pkg/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/perception_yolov8_pkg build --build-base /home/unita/ros2_ws/build/perception_yolov8_pkg/build install --record /home/unita/ros2_ws/build/perception_yolov8_pkg/install.log --single-version-externally-managed install_data

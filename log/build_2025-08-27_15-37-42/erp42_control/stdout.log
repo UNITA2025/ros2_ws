@@ -1,0 +1,56 @@
+running egg_info
+creating ../../build/erp42_control/erp42_control.egg-info
+writing ../../build/erp42_control/erp42_control.egg-info/PKG-INFO
+writing dependency_links to ../../build/erp42_control/erp42_control.egg-info/dependency_links.txt
+writing entry points to ../../build/erp42_control/erp42_control.egg-info/entry_points.txt
+writing requirements to ../../build/erp42_control/erp42_control.egg-info/requires.txt
+writing top-level names to ../../build/erp42_control/erp42_control.egg-info/top_level.txt
+writing manifest file '../../build/erp42_control/erp42_control.egg-info/SOURCES.txt'
+reading manifest file '../../build/erp42_control/erp42_control.egg-info/SOURCES.txt'
+writing manifest file '../../build/erp42_control/erp42_control.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/unita/ros2_ws/build/erp42_control/build
+creating /home/unita/ros2_ws/build/erp42_control/build/lib
+creating /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control
+copying erp42_control/ByteHandler.py -> /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control
+copying erp42_control/ErpSerialHandler.py -> /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control
+copying erp42_control/parking_detecter.py -> /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control
+copying erp42_control/parking.py -> /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control
+copying erp42_control/erp_status.py -> /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control
+copying erp42_control/publish_parking_signal.py -> /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control
+copying erp42_control/__init__.py -> /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control
+running install
+running install_lib
+creating /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control
+copying /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control/ByteHandler.py -> /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control
+copying /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control/ErpSerialHandler.py -> /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control
+copying /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control/parking_detecter.py -> /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control
+copying /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control/parking.py -> /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control
+copying /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control/erp_status.py -> /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control
+copying /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control/publish_parking_signal.py -> /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control
+copying /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control/__init__.py -> /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control
+byte-compiling /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control/ByteHandler.py to ByteHandler.cpython-310.pyc
+byte-compiling /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control/ErpSerialHandler.py to ErpSerialHandler.cpython-310.pyc
+byte-compiling /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control/parking_detecter.py to parking_detecter.cpython-310.pyc
+byte-compiling /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control/parking.py to parking.cpython-310.pyc
+byte-compiling /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control/erp_status.py to erp_status.cpython-310.pyc
+byte-compiling /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control/publish_parking_signal.py to publish_parking_signal.cpython-310.pyc
+byte-compiling /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control/__init__.py to __init__.cpython-310.pyc
+running install_data
+creating /home/unita/ros2_ws/install/erp42_control/share/ament_index
+creating /home/unita/ros2_ws/install/erp42_control/share/ament_index/resource_index
+creating /home/unita/ros2_ws/install/erp42_control/share/ament_index/resource_index/packages
+copying resource/erp42_control -> /home/unita/ros2_ws/install/erp42_control/share/ament_index/resource_index/packages
+copying package.xml -> /home/unita/ros2_ws/install/erp42_control/share/erp42_control
+running install_egg_info
+Copying ../../build/erp42_control/erp42_control.egg-info to /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control-0.0.0-py3.10.egg-info
+running install_scripts
+Installing ByteHandler_node script to /home/unita/ros2_ws/install/erp42_control/lib/erp42_control
+Installing ErpSerialHandler_node script to /home/unita/ros2_ws/install/erp42_control/lib/erp42_control
+Installing erp_status_node script to /home/unita/ros2_ws/install/erp42_control/lib/erp42_control
+Installing parking_detecter_node script to /home/unita/ros2_ws/install/erp42_control/lib/erp42_control
+Installing parking_node script to /home/unita/ros2_ws/install/erp42_control/lib/erp42_control
+Installing publish_parking_signal script to /home/unita/ros2_ws/install/erp42_control/lib/erp42_control
+Installing spin_test_node script to /home/unita/ros2_ws/install/erp42_control/lib/erp42_control
+writing list of installed files to '/home/unita/ros2_ws/build/erp42_control/install.log'

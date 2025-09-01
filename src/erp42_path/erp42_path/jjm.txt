@@ -1,0 +1,17 @@
+global_path
+1. local_path에서 global_path그대로 유지하면서 yaw만 바뀜. -> slice를 전체에서 100으로 짧게 잡고 local만 보도록 수정.
+2. 
+
+
+
+
+local_path
+1. TF브로드캐스트 부분 잘 모르는 상황. frame_id를 vehicle_frame으로 하긴 해야되는거 같음..
+2. global_path를 따라가지 않고 local_path가 이상하게 만들어지고 있음. 뭐가 문제인지..
+3.
+_, _, yaw = euler_from_quaternion([orientation.x, orientation.y, orientation.z,orientation.w])
+이런식으로 yaw가 계산되고 있는데 정확히 어떻게 계산되는지?
+
+
+
+

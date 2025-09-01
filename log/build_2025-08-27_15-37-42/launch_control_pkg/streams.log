@@ -1,0 +1,31 @@
+[0.966s] Invoking command in '/home/unita/ros2_ws/src/launch_control_pkg': PYTHONPATH=/home/unita/ros2_ws/build/launch_control_pkg/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/unita/ros2_ws/install/launch_control_pkg/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/launch_control_pkg build --build-base /home/unita/ros2_ws/build/launch_control_pkg/build install --record /home/unita/ros2_ws/build/launch_control_pkg/install.log --single-version-externally-managed install_data
+[1.128s] running egg_info
+[1.129s] creating ../../build/launch_control_pkg/launch_control_pkg.egg-info
+[1.129s] writing ../../build/launch_control_pkg/launch_control_pkg.egg-info/PKG-INFO
+[1.129s] writing dependency_links to ../../build/launch_control_pkg/launch_control_pkg.egg-info/dependency_links.txt
+[1.129s] writing entry points to ../../build/launch_control_pkg/launch_control_pkg.egg-info/entry_points.txt
+[1.129s] writing requirements to ../../build/launch_control_pkg/launch_control_pkg.egg-info/requires.txt
+[1.129s] writing top-level names to ../../build/launch_control_pkg/launch_control_pkg.egg-info/top_level.txt
+[1.129s] writing manifest file '../../build/launch_control_pkg/launch_control_pkg.egg-info/SOURCES.txt'
+[1.129s] reading manifest file '../../build/launch_control_pkg/launch_control_pkg.egg-info/SOURCES.txt'
+[1.130s] writing manifest file '../../build/launch_control_pkg/launch_control_pkg.egg-info/SOURCES.txt'
+[1.130s] running build
+[1.130s] running install
+[1.130s] running install_data
+[1.130s] creating /home/unita/ros2_ws/install/launch_control_pkg/share/ament_index
+[1.130s] creating /home/unita/ros2_ws/install/launch_control_pkg/share/ament_index/resource_index
+[1.130s] creating /home/unita/ros2_ws/install/launch_control_pkg/share/ament_index/resource_index/packages
+[1.130s] copying resource/launch_control_pkg -> /home/unita/ros2_ws/install/launch_control_pkg/share/ament_index/resource_index/packages
+[1.130s] copying package.xml -> /home/unita/ros2_ws/install/launch_control_pkg/share/launch_control_pkg
+[1.130s] creating /home/unita/ros2_ws/install/launch_control_pkg/share/launch_control_pkg/launch
+[1.131s] copying launch/main.launch.py -> /home/unita/ros2_ws/install/launch_control_pkg/share/launch_control_pkg/launch
+[1.131s] running install_egg_info
+[1.132s] Copying ../../build/launch_control_pkg/launch_control_pkg.egg-info to /home/unita/ros2_ws/install/launch_control_pkg/lib/python3.10/site-packages/launch_control_pkg-0.0.0-py3.10.egg-info
+[1.132s] running install_scripts
+[1.153s] Installing ErpSerialHandler_pub script to /home/unita/ros2_ws/install/launch_control_pkg/lib/launch_control_pkg
+[1.153s] Installing erp_control script to /home/unita/ros2_ws/install/launch_control_pkg/lib/launch_control_pkg
+[1.153s] Installing global_path_pub script to /home/unita/ros2_ws/install/launch_control_pkg/lib/launch_control_pkg
+[1.153s] Installing gps_map_pub script to /home/unita/ros2_ws/install/launch_control_pkg/lib/launch_control_pkg
+[1.153s] Installing local_pub script to /home/unita/ros2_ws/install/launch_control_pkg/lib/launch_control_pkg
+[1.153s] writing list of installed files to '/home/unita/ros2_ws/build/launch_control_pkg/install.log'
+[1.181s] Invoked command in '/home/unita/ros2_ws/src/launch_control_pkg' returned '0': PYTHONPATH=/home/unita/ros2_ws/build/launch_control_pkg/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/unita/ros2_ws/install/launch_control_pkg/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/launch_control_pkg build --build-base /home/unita/ros2_ws/build/launch_control_pkg/build install --record /home/unita/ros2_ws/build/launch_control_pkg/install.log --single-version-externally-managed install_data

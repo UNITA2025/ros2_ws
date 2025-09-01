@@ -1,0 +1,47 @@
+running egg_info
+creating ../../build/erp42_path/erp42_path.egg-info
+writing ../../build/erp42_path/erp42_path.egg-info/PKG-INFO
+writing dependency_links to ../../build/erp42_path/erp42_path.egg-info/dependency_links.txt
+writing entry points to ../../build/erp42_path/erp42_path.egg-info/entry_points.txt
+writing requirements to ../../build/erp42_path/erp42_path.egg-info/requires.txt
+writing top-level names to ../../build/erp42_path/erp42_path.egg-info/top_level.txt
+writing manifest file '../../build/erp42_path/erp42_path.egg-info/SOURCES.txt'
+reading manifest file '../../build/erp42_path/erp42_path.egg-info/SOURCES.txt'
+writing manifest file '../../build/erp42_path/erp42_path.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/unita/ros2_ws/build/erp42_path/build
+creating /home/unita/ros2_ws/build/erp42_path/build/lib
+creating /home/unita/ros2_ws/build/erp42_path/build/lib/erp42_path
+copying erp42_path/global_path_pub.py -> /home/unita/ros2_ws/build/erp42_path/build/lib/erp42_path
+copying erp42_path/gps_map_pub.py -> /home/unita/ros2_ws/build/erp42_path/build/lib/erp42_path
+copying erp42_path/local_pub.py -> /home/unita/ros2_ws/build/erp42_path/build/lib/erp42_path
+copying erp42_path/__init__.py -> /home/unita/ros2_ws/build/erp42_path/build/lib/erp42_path
+copying erp42_path/erp42_control.py -> /home/unita/ros2_ws/build/erp42_path/build/lib/erp42_path
+running install
+running install_lib
+creating /home/unita/ros2_ws/install/erp42_path/lib/python3.10/site-packages/erp42_path
+copying /home/unita/ros2_ws/build/erp42_path/build/lib/erp42_path/global_path_pub.py -> /home/unita/ros2_ws/install/erp42_path/lib/python3.10/site-packages/erp42_path
+copying /home/unita/ros2_ws/build/erp42_path/build/lib/erp42_path/gps_map_pub.py -> /home/unita/ros2_ws/install/erp42_path/lib/python3.10/site-packages/erp42_path
+copying /home/unita/ros2_ws/build/erp42_path/build/lib/erp42_path/local_pub.py -> /home/unita/ros2_ws/install/erp42_path/lib/python3.10/site-packages/erp42_path
+copying /home/unita/ros2_ws/build/erp42_path/build/lib/erp42_path/__init__.py -> /home/unita/ros2_ws/install/erp42_path/lib/python3.10/site-packages/erp42_path
+copying /home/unita/ros2_ws/build/erp42_path/build/lib/erp42_path/erp42_control.py -> /home/unita/ros2_ws/install/erp42_path/lib/python3.10/site-packages/erp42_path
+byte-compiling /home/unita/ros2_ws/install/erp42_path/lib/python3.10/site-packages/erp42_path/global_path_pub.py to global_path_pub.cpython-310.pyc
+byte-compiling /home/unita/ros2_ws/install/erp42_path/lib/python3.10/site-packages/erp42_path/gps_map_pub.py to gps_map_pub.cpython-310.pyc
+byte-compiling /home/unita/ros2_ws/install/erp42_path/lib/python3.10/site-packages/erp42_path/local_pub.py to local_pub.cpython-310.pyc
+byte-compiling /home/unita/ros2_ws/install/erp42_path/lib/python3.10/site-packages/erp42_path/__init__.py to __init__.cpython-310.pyc
+byte-compiling /home/unita/ros2_ws/install/erp42_path/lib/python3.10/site-packages/erp42_path/erp42_control.py to erp42_control.cpython-310.pyc
+running install_data
+creating /home/unita/ros2_ws/install/erp42_path/share/ament_index
+creating /home/unita/ros2_ws/install/erp42_path/share/ament_index/resource_index
+creating /home/unita/ros2_ws/install/erp42_path/share/ament_index/resource_index/packages
+copying resource/erp42_path -> /home/unita/ros2_ws/install/erp42_path/share/ament_index/resource_index/packages
+copying package.xml -> /home/unita/ros2_ws/install/erp42_path/share/erp42_path
+running install_egg_info
+Copying ../../build/erp42_path/erp42_path.egg-info to /home/unita/ros2_ws/install/erp42_path/lib/python3.10/site-packages/erp42_path-0.0.0-py3.10.egg-info
+running install_scripts
+Installing erp42_control_node script to /home/unita/ros2_ws/install/erp42_path/lib/erp42_path
+Installing global_path_pub_node script to /home/unita/ros2_ws/install/erp42_path/lib/erp42_path
+Installing gps_map_pub_node script to /home/unita/ros2_ws/install/erp42_path/lib/erp42_path
+Installing local_pub_node script to /home/unita/ros2_ws/install/erp42_path/lib/erp42_path
+writing list of installed files to '/home/unita/ros2_ws/build/erp42_path/install.log'

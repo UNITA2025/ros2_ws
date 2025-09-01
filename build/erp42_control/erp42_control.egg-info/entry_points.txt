@@ -1,0 +1,11 @@
+[console_scripts]
+ByteHandler_node = erp42_control.ByteHandler:main
+ErpSerialHandler_node = erp42_control.ErpSerialHandler:main
+brake_test_node = erp42_control.brake_test:main
+deliver_node = erp42_control.deliver_node:main
+erp_status_node = erp42_control.erp_status:main
+parking_detecter_node = erp42_control.parking_detecter:main
+parking_node = erp42_control.parking:main
+publish_parking_signal = erp42_control.publish_parking_signal:main
+spin_test_node = erp42_control.spin_test:main
+

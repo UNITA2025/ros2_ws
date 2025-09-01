@@ -1,0 +1,58 @@
+[0.971s] Invoking command in '/home/unita/ros2_ws/src/erp42_control': PYTHONPATH=/home/unita/ros2_ws/build/erp42_control/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/erp42_control build --build-base /home/unita/ros2_ws/build/erp42_control/build install --record /home/unita/ros2_ws/build/erp42_control/install.log --single-version-externally-managed install_data
+[1.123s] running egg_info
+[1.123s] creating ../../build/erp42_control/erp42_control.egg-info
+[1.123s] writing ../../build/erp42_control/erp42_control.egg-info/PKG-INFO
+[1.123s] writing dependency_links to ../../build/erp42_control/erp42_control.egg-info/dependency_links.txt
+[1.123s] writing entry points to ../../build/erp42_control/erp42_control.egg-info/entry_points.txt
+[1.123s] writing requirements to ../../build/erp42_control/erp42_control.egg-info/requires.txt
+[1.123s] writing top-level names to ../../build/erp42_control/erp42_control.egg-info/top_level.txt
+[1.123s] writing manifest file '../../build/erp42_control/erp42_control.egg-info/SOURCES.txt'
+[1.124s] reading manifest file '../../build/erp42_control/erp42_control.egg-info/SOURCES.txt'
+[1.125s] writing manifest file '../../build/erp42_control/erp42_control.egg-info/SOURCES.txt'
+[1.125s] running build
+[1.125s] running build_py
+[1.125s] creating /home/unita/ros2_ws/build/erp42_control/build
+[1.125s] creating /home/unita/ros2_ws/build/erp42_control/build/lib
+[1.125s] creating /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control
+[1.125s] copying erp42_control/ByteHandler.py -> /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control
+[1.125s] copying erp42_control/ErpSerialHandler.py -> /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control
+[1.125s] copying erp42_control/parking_detecter.py -> /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control
+[1.125s] copying erp42_control/parking.py -> /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control
+[1.125s] copying erp42_control/erp_status.py -> /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control
+[1.125s] copying erp42_control/publish_parking_signal.py -> /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control
+[1.125s] copying erp42_control/__init__.py -> /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control
+[1.126s] running install
+[1.126s] running install_lib
+[1.126s] creating /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control
+[1.126s] copying /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control/ByteHandler.py -> /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control
+[1.126s] copying /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control/ErpSerialHandler.py -> /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control
+[1.126s] copying /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control/parking_detecter.py -> /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control
+[1.126s] copying /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control/parking.py -> /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control
+[1.126s] copying /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control/erp_status.py -> /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control
+[1.126s] copying /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control/publish_parking_signal.py -> /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control
+[1.126s] copying /home/unita/ros2_ws/build/erp42_control/build/lib/erp42_control/__init__.py -> /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control
+[1.126s] byte-compiling /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control/ByteHandler.py to ByteHandler.cpython-310.pyc
+[1.127s] byte-compiling /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control/ErpSerialHandler.py to ErpSerialHandler.cpython-310.pyc
+[1.127s] byte-compiling /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control/parking_detecter.py to parking_detecter.cpython-310.pyc
+[1.127s] byte-compiling /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control/parking.py to parking.cpython-310.pyc
+[1.128s] byte-compiling /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control/erp_status.py to erp_status.cpython-310.pyc
+[1.128s] byte-compiling /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control/publish_parking_signal.py to publish_parking_signal.cpython-310.pyc
+[1.128s] byte-compiling /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control/__init__.py to __init__.cpython-310.pyc
+[1.128s] running install_data
+[1.128s] creating /home/unita/ros2_ws/install/erp42_control/share/ament_index
+[1.128s] creating /home/unita/ros2_ws/install/erp42_control/share/ament_index/resource_index
+[1.128s] creating /home/unita/ros2_ws/install/erp42_control/share/ament_index/resource_index/packages
+[1.128s] copying resource/erp42_control -> /home/unita/ros2_ws/install/erp42_control/share/ament_index/resource_index/packages
+[1.128s] copying package.xml -> /home/unita/ros2_ws/install/erp42_control/share/erp42_control
+[1.128s] running install_egg_info
+[1.129s] Copying ../../build/erp42_control/erp42_control.egg-info to /home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages/erp42_control-0.0.0-py3.10.egg-info
+[1.130s] running install_scripts
+[1.143s] Installing ByteHandler_node script to /home/unita/ros2_ws/install/erp42_control/lib/erp42_control
+[1.143s] Installing ErpSerialHandler_node script to /home/unita/ros2_ws/install/erp42_control/lib/erp42_control
+[1.143s] Installing erp_status_node script to /home/unita/ros2_ws/install/erp42_control/lib/erp42_control
+[1.143s] Installing parking_detecter_node script to /home/unita/ros2_ws/install/erp42_control/lib/erp42_control
+[1.143s] Installing parking_node script to /home/unita/ros2_ws/install/erp42_control/lib/erp42_control
+[1.143s] Installing publish_parking_signal script to /home/unita/ros2_ws/install/erp42_control/lib/erp42_control
+[1.143s] Installing spin_test_node script to /home/unita/ros2_ws/install/erp42_control/lib/erp42_control
+[1.143s] writing list of installed files to '/home/unita/ros2_ws/build/erp42_control/install.log'
+[1.164s] Invoked command in '/home/unita/ros2_ws/src/erp42_control' returned '0': PYTHONPATH=/home/unita/ros2_ws/build/erp42_control/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/unita/ros2_ws/install/erp42_control/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/erp42_control build --build-base /home/unita/ros2_ws/build/erp42_control/build install --record /home/unita/ros2_ws/build/erp42_control/install.log --single-version-externally-managed install_data

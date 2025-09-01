@@ -1,0 +1,14 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : [],
+		"files" : [],
+		"nodes" : []
+	},
+	"installers" : [],
+	"paths" : 
+	{
+		"build" : "interfaces_control_pkg__py",
+		"source" : "/home/unita/ros2_ws/build/interfaces_control_pkg/interfaces_control_pkg__py"
+	}
+}
