@@ -1,6 +1,0 @@
-[console_scripts]
-erp42_control_node = erp42_path.erp42_control:main
-global_path_pub_node = erp42_path.global_path_pub:main
-gps_map_pub_node = erp42_path.gps_map_pub:main
-local_pub_node = erp42_path.local_pub:main
-

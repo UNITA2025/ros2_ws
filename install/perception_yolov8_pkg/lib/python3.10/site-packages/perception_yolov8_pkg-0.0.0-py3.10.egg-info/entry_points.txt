@@ -1,4 +1,0 @@
-[console_scripts]
-image_publisher_node = perception_yolov8_pkg.image_publisher_node:main
-yolov8_node = perception_yolov8_pkg.yolov8_node:main
-
