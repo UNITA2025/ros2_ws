@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'launch_control_pkg'
+package_name = 'simulation_path'
 
 setup(
     name=package_name,
@@ -10,23 +10,19 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        ('share/' + package_name + '/launch', ['launch/main.launch.py']),  # ← 추가
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='songsong',
-    maintainer_email='songsong159874@gmail.com',
+    maintainer='unita',
+    maintainer_email='junssong@student.42seoul.kr',
     description='TODO: Package description',
     license='TODO: License declaration',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-        'global_path_pub = erp42_path.global_path_pub:main',
-        'local_pub = erp42_path.local_pub:main',
-        'erp_control = erp42_path.erp_control:main',
-        'gps_map_pub = erp42_path.gps_map_pub:main',
-   	    'marker_control_node = erp42_path.marker_control:main',
-        'ErpSerialHandler_pub = erp42_control.ErpSerialHandler:main',
+            'simulation_global_path_node = simulation_path.simulation_global_path:main',
+            'simulation_local_path_node = simulation_path.simulation_local_path:main',
+            'simulation_control_node = simulation_path.simulation_control:main',
         ],
     },
 )

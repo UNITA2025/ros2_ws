@@ -15,10 +15,16 @@ def generate_launch_description():
             name='local_pub',
             output='screen'
         ),
+        # Node(
+        #     package='erp42_path',
+        #     executable='erp42_control_node',
+        #     name='erp_control',
+        #     output='screen'
+        # ),        
         Node(
             package='erp42_path',
-            executable='erp42_control_node',
-            name='erp_control',
+            executable='marker_control_node',
+            name='marker_control',
             output='screen'
         ),
         # Node(
@@ -27,12 +33,12 @@ def generate_launch_description():
         #     name='gps_map_pub',
         #     output='screen'
         # ),
-        Node(
-            package='erp42_control',
-            executable='ErpSerialHandler_node',  # 빌드 후 실행파일 이름
-            name='ErpSerialHandler_pub',
-            output='screen'
-        ),
+        # Node(
+        #     package='erp42_control',
+        #     executable='ErpSerialHandler_node',  # 빌드 후 실행파일 이름
+        #     name='ErpSerialHandler_pub',
+        #     output='screen'
+        # ),
     ])
 
 

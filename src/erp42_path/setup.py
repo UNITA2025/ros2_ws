@@ -13,7 +13,7 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='jjm',
+    maintainer='songsong',
     maintainer_email='whwoals159874@gmail.com',
     description='TODO: Package description',
     license='TODO: License declaration',
@@ -24,6 +24,7 @@ setup(
             'gps_map_pub_node = erp42_path.gps_map_pub:main',
             'local_pub_node = erp42_path.local_pub:main',
             'erp42_control_node = erp42_path.erp42_control:main',
+            'marker_control_node = erp42_path.marker_control:main',
         ],
     },
 )

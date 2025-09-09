@@ -6,7 +6,7 @@ from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Path
 
 ### path.txt 경로
-file_txt = '/home/songsong/ros2_ws/src/erp42_path/erp42_path/k_city_global_path.txt'
+file_txt = '/home/unita/ros2_ws/src/erp42_path/erp42_path/k_city_global_path.txt'
 ###
 
 class ReadPathPublisher(Node):
