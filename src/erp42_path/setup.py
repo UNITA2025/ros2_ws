@@ -25,6 +25,7 @@ setup(
             'local_pub_node = erp42_path.local_pub:main',
             'erp42_control_node = erp42_path.erp42_control:main',
             'marker_control_node = erp42_path.marker_control:main',
+            'udp_control_node = erp42_path.udp_control:main',
         ],
     },
 )
