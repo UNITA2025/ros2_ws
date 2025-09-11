@@ -26,6 +26,7 @@ setup(
             'erp42_control_node = erp42_path.erp42_control:main',
             'marker_control_node = erp42_path.marker_control:main',
             'udp_control_node = erp42_path.udp_control:main',
+            'erp42status_to_cmdctrl_node = erp42_path.erp42status_to_cmdctrl:main',
         ],
     },
 )
