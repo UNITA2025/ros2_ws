@@ -4,6 +4,8 @@
 import math
 from math import atan2, sin
 from typing import List
+import struct
+import socket
 
 import numpy as np
 import rclpy
@@ -14,27 +16,111 @@ from nav_msgs.msg import Path
 from visualization_msgs.msg import Marker
 from tf_transformations import quaternion_from_euler
 
-# MORAI UDP 통신을 위한 import
-from EgoInfoReceiver import EgoInfoReceiver
-from CtrlCmdSender import CtrlCmdSender
-
 
 def near_zero(x: float, eps: float = 1e-6) -> bool:
     return abs(x) < eps
 
 
-class MoraiPurePursuit(Node):
+class Receiver:
+    """UDP 수신을 위한 기본 클래스"""
+    def __init__(self, ip, port, callback):
+        self.ip = ip
+        self.port = port
+        self.callback = callback
+        self.socket = None
+        self.running = False
+        
+    def start(self):
+        """UDP 수신 시작"""
+        try:
+            self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            self.socket.bind((self.ip, self.port))
+            self.socket.settimeout(0.01)  # 10ms timeout for non-blocking
+            self.running = True
+            return True
+        except Exception as e:
+            print(f"Failed to start UDP receiver: {e}")
+            return False
+    
+    def stop(self):
+        """UDP 수신 중지"""
+        self.running = False
+        if self.socket:
+            self.socket.close()
+    
+    def receive_once(self):
+        """한 번의 수신 시도 (non-blocking)"""
+        if not self.running or not self.socket:
+            return
+            
+        try:
+            data, addr = self.socket.recvfrom(4096)
+            parsed_data = self.parse_data(data)
+            if parsed_data and self.callback:
+                self.callback(parsed_data)
+        except socket.timeout:
+            pass  # timeout은 정상 동작
+        except Exception as e:
+            print(f"UDP receive error: {e}")
+    
+    def parse_data(self, raw_data):
+        """상속받는 클래스에서 구현"""
+        return raw_data
+
+
+class EgoInfoReceiver(Receiver):
+    def __init__(self, ip, port, callback):
+        super().__init__(ip, port, callback)
+        self.header = '#MoraiInfo$'
+        self.data_length = 132
+        
+    def parse_data(self, raw_data):
+        try:
+            if len(raw_data) < 15:
+                return []
+                
+            header = raw_data[0:11].decode()
+            if header != self.header:
+                return []
+                
+            data_len = struct.unpack('i', raw_data[11:15])[0]
+            if data_len != self.data_length or len(raw_data) < 179:
+                return []
+            
+            # 데이터 파싱
+            secs = struct.unpack('f', raw_data[27:31])[0]
+            nsecs = struct.unpack('f', raw_data[31:35])[0]
+            ctrl_mode = struct.unpack('b', raw_data[35:36])[0]
+            gear = struct.unpack('b', raw_data[36:37])[0]
+            signed_vel = struct.unpack('f', raw_data[37:41])[0]   # km/h
+            map_id = struct.unpack('i', raw_data[41:45])[0]
+            accel = struct.unpack('f', raw_data[45:49])[0]
+            brake = struct.unpack('f', raw_data[49:53])[0]
+            size_x, size_y, size_z = struct.unpack('fff', raw_data[53:65])
+            overhang, wheelbase, rear_overhang = struct.unpack('fff', raw_data[65:77])
+            pos_x, pos_y, pos_z = struct.unpack('fff', raw_data[77:89])
+            roll, pitch, yaw = struct.unpack('fff', raw_data[89:101])
+            vel_x, vel_y, vel_z = struct.unpack('fff', raw_data[101:113])
+            ang_vel_x, ang_vel_y, ang_vel_z = struct.unpack('fff', raw_data[113:125])
+            acc_x, acc_y, acc_z = struct.unpack('fff', raw_data[125:137])
+            steer = struct.unpack('f', raw_data[137:141])[0]
+            link_id = raw_data[141:179].decode().rstrip('\x00')
+            
+            return [
+                ctrl_mode, gear, signed_vel, map_id, accel, brake, size_x, size_y, size_z, overhang, wheelbase,
+                rear_overhang, pos_x, pos_y, pos_z, roll, pitch, yaw, vel_x, vel_y, vel_z, acc_x, acc_y, acc_z, steer
+            ]
+        except Exception as e:
+            print(f"EgoInfoReceiver parse error: {e}")
+            return []
+
+
+class PurePursuitUDP(Node):
     def __init__(self):
-        super().__init__('morai_pure_pursuit')
+        super().__init__('pure_pursuit_udp')
 
         # ================= 파라미터 =================
-        # UDP 통신 설정
-        self.declare_parameter('ego_info_host', '127.0.0.1')
-        self.declare_parameter('ego_info_port', 9097)
-        self.declare_parameter('ctrl_cmd_host', '127.0.0.1')
-        self.declare_parameter('ctrl_cmd_port', 9095)
-
-        # 단위/샘플링
+        # 제어 주기
         self.declare_parameter('control_dt', 0.1)           # timer 주기 [s]
 
         # 차량/조향
@@ -47,21 +133,23 @@ class MoraiPurePursuit(Node):
         self.declare_parameter('lfd_min', 2.0)
         self.declare_parameter('lfd_max', 15.0)
 
-        # 속도 커맨드 간단 로직 (0.0~1.0 범위)
-        self.declare_parameter('accel_straight', 0.3)  # 직선 주행시 가속 페달
-        self.declare_parameter('accel_turn', 0.1)      # 회전시 가속 페달
-        self.declare_parameter('brake_stop', 0.8)      # 정지시 브레이크
-        self.declare_parameter('turn_deg_threshold', 5.0)
-
         # (0,0) 첫 점 스킵 여부
         self.declare_parameter('skip_prepend_current', True)
 
-        # 파라미터 가져오기
-        self.ego_host = str(self.get_parameter('ego_info_host').value)
-        self.ego_port = int(self.get_parameter('ego_info_port').value)
-        self.ctrl_host = str(self.get_parameter('ctrl_cmd_host').value)
-        self.ctrl_port = int(self.get_parameter('ctrl_cmd_port').value)
+        # UDP 제어 명령 전송 설정
+        self.declare_parameter('udp_control_host', '127.0.0.1')
+        self.declare_parameter('udp_control_port', 9091)
 
+        # UDP 상태 수신 설정
+        self.declare_parameter('udp_status_host', '127.0.0.1')
+        self.declare_parameter('udp_status_port', 9094)
+
+        # 속도 제어 설정
+        self.declare_parameter('throttle_straight', 0.3)    # 직진 시 throttle (0.0~1.0)
+        self.declare_parameter('throttle_turn', 0.2)        # 회전 시 throttle (0.0~1.0)
+        self.declare_parameter('turn_deg_threshold', 5.0)   # 회전 판단 임계값 [deg]
+
+        # 파라미터 가져오기
         self.dt = float(self.get_parameter('control_dt').value)
 
         self.L = float(self.get_parameter('wheelbase').value)
@@ -72,48 +160,42 @@ class MoraiPurePursuit(Node):
         self.lfd_min = float(self.get_parameter('lfd_min').value)
         self.lfd_max = float(self.get_parameter('lfd_max').value)
 
-        self.accel_straight = float(self.get_parameter('accel_straight').value)
-        self.accel_turn = float(self.get_parameter('accel_turn').value)
-        self.brake_stop = float(self.get_parameter('brake_stop').value)
-        self.turn_deg_threshold = float(self.get_parameter('turn_deg_threshold').value)
-
         self.skip_prepend_current = bool(self.get_parameter('skip_prepend_current').value)
 
-        # ================= UDP 통신 설정 =================
-        try:
-            # EgoInfo 수신기 초기화
-            self.ego_receiver = EgoInfoReceiver(self.ego_host, self.ego_port, self.ego_data_callback)
-            self.get_logger().info(f"EgoInfo UDP receiver started: {self.ego_host}:{self.ego_port}")
+        # UDP 설정
+        self.udp_control_host = str(self.get_parameter('udp_control_host').value)
+        self.udp_control_port = int(self.get_parameter('udp_control_port').value)
+        
+        self.udp_status_host = str(self.get_parameter('udp_status_host').value)
+        self.udp_status_port = int(self.get_parameter('udp_status_port').value)
 
-            # CtrlCmd 송신기 초기화
-            self.ctrl_sender = CtrlCmdSender(self.ctrl_host, self.ctrl_port)
-            self.get_logger().info(f"CtrlCmd UDP sender started: {self.ctrl_host}:{self.ctrl_port}")
+        # 속도 제어 설정
+        self.throttle_straight = float(self.get_parameter('throttle_straight').value)
+        self.throttle_turn = float(self.get_parameter('throttle_turn').value)
+        self.turn_deg_threshold = float(self.get_parameter('turn_deg_threshold').value)
 
-        except Exception as e:
-            self.get_logger().error(f"UDP setup failed: {e}")
-            return
-
-        # ================= ROS2 Pub/Sub =================
-        # Path 구독은 ROS2로 유지
+        # ================= Pub/Sub =================
+        # 경로 구독
         self.create_subscription(Path, '/local_path', self.path_callback, 10)
 
-        # visualization
+        # visualization (옵션 - 필요시 제거 가능)
         self.lookahead_marker_pub = self.create_publisher(Marker, '/lookahead_marker', 10)
         self.lookahead_pose_pub   = self.create_publisher(PoseStamped, '/lookahead_pose', 10)
 
+        # ================= UDP 제어 설정 =================
+        self.setup_udp_control()
+
+        # ================= UDP 상태 수신 설정 =================
+        self.setup_udp_status()
+
         # ================= 상태 =================
         self.is_path = False
-        self.is_ego_status = False
+        self.is_status = False
         self.path = Path()
 
-        # EgoInfo 데이터 저장
-        self.cur_speed_ms = 0.0      # m/s로 내부 통일 (km/h -> m/s 변환)
-        self.cur_pos_x = 0.0         # 현재 위치
-        self.cur_pos_y = 0.0
-        self.cur_yaw = 0.0           # 현재 헤딩
-        self.ego_data_count = 0
-
+        self.cur_speed_ms = 0.0  # m/s로 내부 통일
         self.vehicle_length = self.L
+
         self.forward_point = Point()
         self._last_steer_deg = 0.0  # 레이트 제한용 메모리
 
@@ -121,52 +203,108 @@ class MoraiPurePursuit(Node):
         self.timer = self.create_timer(self.dt, self.timer_callback)
 
         self.get_logger().info(
-            f"MORAI PurePursuit started. dt={self.dt}, "
-            f"L={self.L}, max_steer={self.max_steer_deg}deg, rate={self.max_steer_rate_deg_s}deg/s"
+            f"PurePursuit UDP Control started. dt={self.dt}, "
+            f"L={self.L}, max_steer={self.max_steer_deg}deg, "
+            f"Control UDP: {self.udp_control_host}:{self.udp_control_port}, "
+            f"Status UDP: {self.udp_status_host}:{self.udp_status_port}"
         )
 
-    # ================= UDP 콜백 =================
-    def ego_data_callback(self, parsed_data):
-        """EgoInfo UDP 데이터 수신 콜백"""
-        if parsed_data and len(parsed_data) >= 25:
-            try:
-                # EgoInfoReceiver의 _parsed_data 순서에 따라 파싱
-                ctrl_mode, gear, signed_vel, map_id, accel, brake = parsed_data[0:6]
-                size_x, size_y, size_z, overhang, wheelbase, rear_overhang = parsed_data[6:12]
-                pos_x, pos_y, pos_z = parsed_data[12:15]
-                roll, pitch, yaw = parsed_data[15:18]
-                vel_x, vel_y, vel_z = parsed_data[18:21]
-                acc_x, acc_y, acc_z = parsed_data[21:24]
-                steer = parsed_data[24]
+    def setup_udp_control(self):
+        """UDP 제어 명령 전송 설정"""
+        try:
+            # UDP 소켓 생성
+            self.udp_control_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            
+            # MORAI 제어 명령 헤더 설정
+            message_name = '#MoraiCtrlCmd$'.encode()
+            data_length = struct.pack('i', 23)
+            aux_data = struct.pack('iii', 0, 0, 0)
+            self.ctrl_header = message_name + data_length + aux_data
+            self.ctrl_tail = '\r\n'.encode()
+            
+            self.get_logger().info("UDP control socket initialized")
+        except Exception as e:
+            self.get_logger().error(f"Failed to setup UDP control: {e}")
+            raise
 
-                # 필요한 데이터만 저장
-                if signed_vel is not None:
-                    self.cur_speed_ms = float(signed_vel) * (1000.0 / 3600.0)  # km/h -> m/s
-                if pos_x is not None and pos_y is not None:
-                    self.cur_pos_x = float(pos_x)
-                    self.cur_pos_y = float(pos_y)
-                if yaw is not None:
-                    self.cur_yaw = float(yaw)
+    def setup_udp_status(self):
+        """UDP 상태 수신 설정"""
+        try:
+            # EgoInfoReceiver 초기화
+            self.ego_info_receiver = EgoInfoReceiver(
+                self.udp_status_host, 
+                self.udp_status_port, 
+                self.ego_info_callback
+            )
+            
+            if self.ego_info_receiver.start():
+                self.get_logger().info("UDP status receiver initialized")
+            else:
+                raise Exception("Failed to start UDP status receiver")
+                
+        except Exception as e:
+            self.get_logger().error(f"Failed to setup UDP status receiver: {e}")
+            raise
 
-                self.ego_data_count += 1
-                self.is_ego_status = True
+    def ego_info_callback(self, parsed_data):
+        """UDP로 받은 차량 상태 정보 콜백"""
+        if len(parsed_data) >= 25:
+            # parsed_data[2] = signed_vel (km/h)
+            speed_kmh = parsed_data[2]
+            # km/h를 m/s로 변환
+            self.cur_speed_ms = float(speed_kmh) * (1000.0 / 3600.0)
+            self.is_status = True
 
-            except Exception as e:
-                self.get_logger().warn(f"EgoInfo parsing error: {e}")
-        else:
-            self.is_ego_status = False
+    def send_udp_control(self, throttle=0.0, brake=0.0, steering=0.0, cmd_type=1, velocity=0.0, acceleration=0.0):
+        """UDP로 제어 명령 전송"""
+        try:
+            # 제어 데이터 패킹
+            mode = struct.pack('b', 2)  # AutoMode
+            gear = struct.pack('b', 4)  # Drive
+            cmd_type_packed = struct.pack('b', cmd_type)
+            velocity_packed = struct.pack('f', velocity)
+            acceleration_packed = struct.pack('f', acceleration)
+            throttle_packed = struct.pack('f', throttle)
+            brake_packed = struct.pack('f', brake)
+            steering_packed = struct.pack('f', steering)
+            
+            message = (mode + gear + cmd_type_packed + velocity_packed + 
+                      acceleration_packed + throttle_packed + brake_packed + steering_packed)
+            
+            formatted_data = self.ctrl_header + message + self.ctrl_tail
+            
+            # UDP 전송
+            self.udp_control_socket.sendto(formatted_data, (self.udp_control_host, self.udp_control_port))
+            return True
+            
+        except Exception as e:
+            self.get_logger().error(f"UDP control send failed: {e}")
+            return False
 
-    # ================= ROS2 콜백 =================
+    def send_stop_command(self):
+        """정지 명령 전송"""
+        return self.send_udp_control(
+            throttle=0.0,
+            brake=1.0,
+            steering=0.0,
+            cmd_type=1
+        )
+
+    # ================= 콜백 =================
     def path_callback(self, msg: Path):
         self.path = msg
         self.is_path = True
 
     def timer_callback(self):
-        if not self.is_path or not self.is_ego_status:
-            if not self.is_path:
-                self.get_logger().throttle(2000, "[local_path] not received.")
-            if not self.is_ego_status:
-                self.get_logger().throttle(2000, "[ego_info] not received via UDP.")
+        # UDP 상태 수신 체크
+        if hasattr(self, 'ego_info_receiver'):
+            self.ego_info_receiver.receive_once()
+        
+        if not self.is_path or not self.is_status:
+            # if not self.is_path:
+            #     self.get_logger().throttle(2000, "[local_path] not received.")
+            # if not self.is_status:
+            #     self.get_logger().throttle(2000, "[ego_info] not received.")
             return
 
         self.pure_pursuit_control()
@@ -181,7 +319,7 @@ class MoraiPurePursuit(Node):
         poses: List[PoseStamped] = self.path.poses
         if len(poses) == 0:
             self.get_logger().warn("Empty /local_path")
-            self.publish_stop()
+            self.send_stop_command()
             self.clear_lookahead_visuals()
             return
 
@@ -197,7 +335,7 @@ class MoraiPurePursuit(Node):
 
         if len(poses_iter) == 0:
             self.get_logger().warn("No candidate points after skipping (0,0).")
-            self.publish_stop()
+            self.send_stop_command()
             self.clear_lookahead_visuals()
             return
 
@@ -222,7 +360,7 @@ class MoraiPurePursuit(Node):
                 self.get_logger().info("Reached end of path → stop.")
             else:
                 self.get_logger().warn("Lookahead not found → stop.")
-            self.publish_stop()
+            self.send_stop_command()
             self.clear_lookahead_visuals()
             return
 
@@ -240,48 +378,42 @@ class MoraiPurePursuit(Node):
         steer_deg_limited = self._last_steer_deg + d_deg
         self._last_steer_deg = steer_deg_limited
 
-        # 6) 가속/브레이크 명령 (0.0~1.0 범위)
+        # 6) 제어 명령 계산
+        # 조향: -1.0 ~ 1.0 범위로 정규화
+        steering_normalized = steer_deg_limited / self.max_steer_deg
+        steering_normalized = float(np.clip(steering_normalized, -1.0, 1.0))
+        
+        # 속도: 조향각에 따라 throttle 결정
         if abs(steer_deg_limited) <= self.turn_deg_threshold:
-            accel_cmd = self.accel_straight
+            throttle = self.throttle_straight
         else:
-            accel_cmd = self.accel_turn
+            throttle = self.throttle_turn
 
-        brake_cmd = 0.0  # 정상 주행시에는 브레이크 0
-
-        # 7) UDP로 제어 명령 전송
-        self.send_ctrl_cmd(accel_cmd, brake_cmd, math.radians(steer_deg_limited))
-
-        # 8) 시각화
-        self.publish_lookahead_visuals(theta)
-
-        # 적당한 주기로 로그
-        self.get_logger().throttle(
-            1000,
-            f"v={v:.2f}m/s, lfd={lfd:.2f}m, theta={theta:.3f}rad, "
-            f"steer={steer_deg_limited:.1f}deg, accel={accel_cmd:.2f}"
+        # 7) UDP 제어 명령 전송
+        success = self.send_udp_control(
+            throttle=throttle,
+            brake=0.0,
+            steering=steering_normalized,
+            cmd_type=1  # Throttle mode
         )
 
-    # ================= UDP 통신 =================
-    def send_ctrl_cmd(self, accel: float, brake: float, steering_rad: float):
-        """MORAI에 제어 명령 전송"""
-        try:
-            # CtrlCmdSender의 format_data는 [accel, brake, steering] 순서
-            ctrl_data = [accel, brake, steering_rad]
-            self.ctrl_sender.send(ctrl_data)
-        except Exception as e:
-            self.get_logger().warn(f"Failed to send ctrl command: {e}")
+        # 8) 시각화 (옵션)
+        self.publish_lookahead_visuals(theta)
 
-    def publish_stop(self):
-        """정지 명령 전송"""
-        try:
-            # 정지: 가속 0, 브레이크 최대, 조향 0
-            ctrl_data = [0.0, self.brake_stop, 0.0]
-            self.ctrl_sender.send(ctrl_data)
-        except Exception as e:
-            self.get_logger().warn(f"Failed to send stop command: {e}")
+        # 로그 출력
+        if success:
+            self.get_logger().info(
+                f"v={v:.2f}m/s, lfd={lfd:.2f}m, theta={theta:.3f}rad, "
+                f"steer={steer_deg_limited:.1f}deg, throttle={throttle:.2f}, "
+                f"steering_cmd={steering_normalized:.3f}",
+                throttle_duration_sec=1.0
+            )
+        else:
+            self.get_logger().warn("UDP command send failed")
 
-    # ================= 시각화 =================
+    # ================= 시각화 (옵션) =================
     def publish_lookahead_visuals(self, theta: float):
+        """lookahead 목표점 시각화 (필요시 제거 가능)"""
         # marker
         m = Marker()
         m.header.frame_id = 'vehicle_frame'
@@ -326,24 +458,22 @@ class MoraiPurePursuit(Node):
         m.action = Marker.DELETE
         self.lookahead_marker_pub.publish(m)
 
-    def __del__(self):
-        """소멸자에서 UDP 연결 정리"""
-        try:
-            if hasattr(self, 'ego_receiver'):
-                del self.ego_receiver
-            if hasattr(self, 'ctrl_sender'):
-                del self.ctrl_sender
-        except:
-            pass
+    def destroy_node(self):
+        """노드 종료 시 UDP 소켓 정리"""
+        if hasattr(self, 'udp_control_socket'):
+            self.udp_control_socket.close()
+        if hasattr(self, 'ego_info_receiver'):
+            self.ego_info_receiver.stop()
+        super().destroy_node()
 
 
 def main(args=None):
     rclpy.init(args=args)
-    node = MoraiPurePursuit()
+    node = PurePursuitUDP()
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
-        print("Shutting down...")
+        print("\nShutting down...")
     finally:
         node.destroy_node()
         rclpy.shutdown()

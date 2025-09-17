@@ -45,7 +45,7 @@ class PurePursuit(Node):
         self.declare_parameter('steer_invert', False)  # 좌/우 반전 필요하면 True
 
         # 속도 커맨드 간단 로직
-        self.declare_parameter('speed_cmd_straight', 100)
+        self.declare_parameter('speed_cmd_straight', 50)
         self.declare_parameter('speed_cmd_turn', 50)
         self.declare_parameter('turn_deg_threshold', 5.0)
 
@@ -118,10 +118,10 @@ class PurePursuit(Node):
 
     def timer_callback(self):
         if not self.is_path or not self.is_status:
-            if not self.is_path:
-                self.get_logger().throttle(2000, "[local_path] not received.")
-            if not self.is_status:
-                self.get_logger().throttle(2000, "[erp42_status] not received.")
+            # if not self.is_path:
+            #     self.get_logger().throttle(2000, "[local_path] not received.")
+            # if not self.is_status:
+            #     self.get_logger().throttle(2000, "[erp42_status] not received.")
             return
 
         self.pure_pursuit_control()
@@ -209,11 +209,11 @@ class PurePursuit(Node):
         self.publish_cmd(steer_cmd, speed_cmd)
 
         # 적당한 주기로 로그
-        self.get_logger().throttle(
-            1000,
-            f"v={v:.2f}m/s, lfd={lfd:.2f}m, theta={theta:.3f}rad, "
-            f"steer={steer_deg_limited:.1f}deg (cmd={steer_cmd})"
-        )
+        # self.get_logger().throttle(
+        #     1000,
+        #     f"v={v:.2f}m/s, lfd={lfd:.2f}m, theta={theta:.3f}rad, "
+        #     f"steer={steer_deg_limited:.1f}deg (cmd={steer_cmd})"
+        # )
 
     # ================= 퍼블리시/헬퍼 =================
     def publish_cmd(self, steer_cmd: int, speed_cmd: int):
