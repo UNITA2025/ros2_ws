@@ -1159,6 +1159,18 @@ class PurePursuit(Node):
         
         return poses
     
+    def _is_reverse_segment(self) -> bool:
+        """현재 추종 중인 경로 구간이 후진인지 판단"""
+        # Pure Pursuit에서 사용 중인 poses 리스트의 첫 번째 점 확인
+        # (어차피 lookahead로 선택된 구간)
+        poses = self._get_candidate_poses()
+        
+        if poses:
+            frame_id = poses[0].header.frame_id.lower()
+            return "reverse" in frame_id
+        
+        return False
+    
     def _publish_cmd(self, steer_cmd: int, speed_cmd: int):
         """Publish control command."""
         msg = self._cmd_msg
