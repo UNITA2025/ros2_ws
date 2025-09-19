@@ -497,6 +497,7 @@ import tf2_geometry_msgs
 
 from geometry_msgs.msg import Point, PoseStamped, TransformStamped
 from nav_msgs.msg import Path
+from std_msgs.msg import String
 from visualization_msgs.msg import Marker
 from tf_transformations import quaternion_from_euler
 
@@ -682,6 +683,10 @@ class PurePursuitController:
         # Pure pursuit steering calculation
         steer_rad = math.atan2(2.0 * self.vehicle_params.wheelbase * math.sin(theta), lfd)
         steer_deg = math.degrees(steer_rad)
+
+        # 후진시 조향 방향 반전
+        if self.controller_mode == "parking" and self._is_reverse_segment():
+            steer_deg = -steer_deg  # 조향 반전
         
         # Apply steering limits
         return float(np.clip(steer_deg, -self.vehicle_params.max_steer_deg, self.vehicle_params.max_steer_deg))
@@ -906,6 +911,8 @@ class PurePursuit(Node):
         # Subscribers
         self.create_subscription(Path, '/local_path', self.path_callback, 10)
         self.create_subscription(ErpStatusMsg, '/erp42_status', self.status_callback, 10)
+        self.create_subscription(String, '/controller_mode', self.mode_callback, 10)
+
     
     
     def _initialize_state(self):
@@ -1009,6 +1016,21 @@ class PurePursuit(Node):
             self.state = ControllerState.ERROR
             self._publish_stop()
             self._clear_lookahead_visuals()
+
+    def mode_callback(self, msg: String):
+        self.controller_mode = msg.data
+        
+        if msg.data == "parking":
+            # 주차 모드: 더 보수적인 파라미터
+            self.current_lfd_gain = 1.5      # 더 짧은 lookahead
+            self.current_speed_limit = 30    # 더 낮은 속도
+            self.current_max_steer = 15.0    # 더 작은 최대 조향각
+        else:
+            # 일반 모드: 기본 파라미터
+            self.current_lfd_gain = self.lookahead_params.gain
+            self.current_speed_limit = self.control_params.speed_cmd_straight
+            self.current_max_steer = self.vehicle_params.max_steer_deg
+    
     
     def _is_data_fresh(self) -> bool:
         """Check if received data is fresh enough."""
@@ -1141,10 +1163,25 @@ class PurePursuit(Node):
         """Publish control command."""
         msg = self._cmd_msg
         msg.steer = steer_cmd
-        msg.speed = speed_cmd
-        msg.gear = 0
-        msg.brake = 0
+        
+        if self.controller_mode == "parking":
+            # 주차 모드: 후진 지원
+            if self._is_reverse_segment():
+                msg.gear = 2          # 후진 기어
+                msg.speed = abs(speed_cmd)  # 속도는 양수로
+                msg.brake = 0
+            else:
+                msg.gear = 0          # 전진 기어
+                msg.speed = speed_cmd
+                msg.brake = 0
+        else:
+            # 일반 모드: 기존 로직
+            msg.gear = 0
+            msg.speed = speed_cmd
+            msg.brake = 0
+
         self.cmd_pub.publish(msg)
+        
     
     def _publish_stop(self):
         """Publish stop command."""
