@@ -909,7 +909,9 @@ class PurePursuit(Node):
         self.lookahead_pose_pub = self.create_publisher(PoseStamped, '/lookahead_pose', 10)
         
         # Subscribers
-        self.create_subscription(Path, '/local_path', self.path_callback, 10)
+        # self.create_subscription(Path, '/local_path', self.path_callback, 10)
+
+        self.create_subscription(Path, '/active_path', self.path_callback, 10)
         self.create_subscription(ErpStatusMsg, '/erp42_status', self.status_callback, 10)
         self.create_subscription(String, '/controller_mode', self.mode_callback, 10)
 
