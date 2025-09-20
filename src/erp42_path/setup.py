@@ -30,6 +30,9 @@ setup(
             'straight_drive_node = erp42_path.straight_drive:main',
             'morai_udp_erp = erp42_path.morai_udp_erp:main',
             'erp_ctrl_cmd_to_udp = erp42_path.epr_ctrl_cmd_to_udp:main',
+            'erp42_status_to_cmd = erp42_path.erp42_status_to_cmd:main',
+            'two_gps_to_path = erp42_path.two_gps_to_path:main',
+            'pure_pursuit = erp42_path.pure_pursuit:main',
         ],
     },
 )

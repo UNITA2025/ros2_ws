@@ -133,7 +133,10 @@ class EgoInfoNode(Node):
 
         # 토픽 발행
         msg = ErpStatusMsg()
-        msg.speed = int(data[2])   # km/h
+        speed = int(data[2])
+        if speed < 0 :
+            speed *= -1
+        msg.speed = speed # km/h
         msg.steer = int(map_range(data[24]))  # deg (MORAI 출력 단위 확인!) 
         msg.gear = int(data[1])
         msg.brake = int(data[5])

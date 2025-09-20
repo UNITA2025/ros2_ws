@@ -2,7 +2,6 @@
 
 import rclpy
 from rclpy.node import Node
-
 from interfaces_control_pkg.msg import ErpCmdMsg, ErpStatusMsg
 # 실제 메시지 타입으로 변경하세요
 # from erp42_msgs.msg import Erp42Status, Erp42CmdCtrl
@@ -24,7 +23,7 @@ class ERP42StatusToCmdBridge(Node):
         self.cmd_publisher = self.create_publisher(
             # Erp42CmdCtrl,  # 실제 메시지 타입으로 변경
             ErpCmdMsg,
-            '/erp42_cmd_ctrl',
+            '/erp42_ctrl_cmd',
             10
         )
 
@@ -34,13 +33,13 @@ class ERP42StatusToCmdBridge(Node):
         """ERP42 상태를 받아서 그대로 제어 명령으로 발행"""
 
         # Erp42CmdCtrl 메시지 생성
-        cmd_msg = type('Erp42CmdCtrl', (), {})()  # 실제로는 Erp42CmdCtrl()
+        cmd_msg = ErpCmdMsg()  # 실제로는 Erp42CmdCtrl()
 
         # status에서 cmd로 동일한 필드들 복사
         cmd_msg.e_stop = status_msg.e_stop
         cmd_msg.gear = status_msg.gear
-        cmd_msg.speed = status_msg.speed
-        cmd_msg.steer = status_msg.steer
+        cmd_msg.speed = status_msg.speed * 10
+        cmd_msg.steer = -status_msg.steer
         cmd_msg.brake = status_msg.brake
 
         # 제어 명령 발행
