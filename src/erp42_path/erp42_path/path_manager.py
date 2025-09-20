@@ -32,6 +32,7 @@ class PathManager(Node):
         self.global_path: Optional[Path] = None
         self.parking_path: Optional[Path] = None
         self.parking_check = False
+        self.mission_completed = False
 
         # 후진용 상태
         self._reverse_t0: Optional[float] = None
@@ -137,8 +138,10 @@ class PathManager(Node):
 
         prev_mode = self.current_mode
         if self.current_mode == "normal":
-            if self._should_switch_to_parking() and self.parking_check == False :
-                self.check = True
+            if (not self.mission_completed and 
+                self._should_switch_to_parking() and 
+                not self.parking_check):
+                self.parking_check = True  # 주차 시도 플래그 설정
                 self._change_mode_to("parking")
 
         elif self.current_mode == "parking":
@@ -146,11 +149,10 @@ class PathManager(Node):
             if self._parking_completed():
                 if self.enable_reverse_out:
                     self._start_reverse_out()
-                else:
-                    self._change_mode_to("reverse_out")
 
         elif self.current_mode == "reverse_out":
             if self._reverse_out_finished():
+                self.mission_completed = True # 미션 완료 플래그 설정
                 self.get_logger().info("↩ 후진 완료 → Global Path 합류 (normal)")
                 self._change_mode_to("normal")
 
