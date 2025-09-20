@@ -34,6 +34,7 @@ setup(
             'erp42_status_to_cmd = erp42_path.erp42_status_to_cmd:main',
             'two_gps_to_path = erp42_path.two_gps_to_path:main',
             'pure_pursuit = erp42_path.pure_pursuit:main',
+            'path_manager = erp42_path.path_manager:main',
         ],
     },
 )

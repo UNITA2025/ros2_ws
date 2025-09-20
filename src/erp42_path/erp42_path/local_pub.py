@@ -43,7 +43,7 @@ class ImprovedPathPublisher(Node):
         self._load_parameters()
 
         # 구독/퍼블리시
-        self.create_subscription(Path, '/global_path', self.global_path_callback, 10)
+        self.create_subscription(Path, '/active_path', self.global_path_callback, 10)
         self.create_subscription(Odometry, '/odometry/local_enu', self.odom_callback, 10)
 
         self.local_path_pub = self.create_publisher(Path, '/local_path', 10)

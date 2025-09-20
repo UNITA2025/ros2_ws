@@ -1021,19 +1021,19 @@ class PurePursuit(Node):
             self._publish_stop()
             self._clear_lookahead_visuals()
 
-    # def mode_callback(self, msg: String):
-    #     self.controller_mode = msg.data
+    def mode_callback(self, msg: String):
+        self.controller_mode = msg.data
         
-    #     if msg.data == "parking":
-    #         # 주차 모드: 더 보수적인 파라미터
-    #         self.current_lfd_gain = 1.5      # 더 짧은 lookahead
-    #         self.current_speed_limit = 30    # 더 낮은 속도
-    #         self.current_max_steer = 15.0    # 더 작은 최대 조향각
-    #     else:
-    #         # 일반 모드: 기본 파라미터
-    #         self.current_lfd_gain = self.lookahead_params.gain
-    #         self.current_speed_limit = self.control_params.speed_cmd_straight
-    #         self.current_max_steer = self.vehicle_params.max_steer_deg
+        if msg.data == "parking":
+            # 주차 모드: 더 보수적인 파라미터
+            self.current_lfd_gain = 1.5      # 더 짧은 lookahead
+            self.current_speed_limit = 30    # 더 낮은 속도
+            self.current_max_steer = 15.0    # 더 작은 최대 조향각
+        else:
+            # 일반 모드: 기본 파라미터
+            self.current_lfd_gain = self.lookahead_params.gain
+            self.current_speed_limit = self.control_params.speed_cmd_straight
+            self.current_max_steer = self.vehicle_params.max_steer_deg
     
     
     def _is_data_fresh(self) -> bool:
@@ -1190,6 +1190,12 @@ class PurePursuit(Node):
                 msg.gear = 0          # 전진 기어
                 msg.speed = speed_cmd
                 msg.brake = 0
+        if self.controller_mode == "reverse_out":
+                msg.gear = 2
+                msg.speed = 30
+                msg.brake = 0
+                msg.steer = 0
+                self.time = 3
         else:
             # 일반 모드: 기존 로직
             msg.gear = 0
