@@ -6,14 +6,14 @@ from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Path
 
 ### path.txt 경로
-file_txt = '/home/unita/ros2_ws_for_morai/src/erp42_path/erp42_path/global_morai.txt'
+file_txt = '/home/unita/ros2_ws_for_morai/src/erp42_path/erp42_path/park1_morai.txt'
 ###
 
 class ReadPathPublisher(Node):
     def __init__(self):
-        super().__init__('read_path_pub')
+        super().__init__('read_park_path_pub')
 
-        self.global_path_pub = self.create_publisher(Path, '/global_path', 10)
+        self.global_path_pub = self.create_publisher(Path, '/parking_path', 10)
 
         # 미리 한 번만 읽어서 보관
         self.global_path_msg = Path()

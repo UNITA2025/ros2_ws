@@ -577,6 +577,7 @@ class PurePursuitController:
         # 성능 최적화를 위한 캐시
         self._position_cache = None
         self._cache_timestamp = 0
+        self.controller_mode = "driving"
     
     def calculate_lookahead_distance(self, current_speed_ms: float) -> float:
         """Calculate adaptive lookahead distance based on speed."""
@@ -738,6 +739,7 @@ class PurePursuit(Node):
         self.state = ControllerState.IDLE
         self.last_path_time: Optional[rclpy.time.Time] = None
         self.last_status_time: Optional[rclpy.time.Time] = None
+        self.controller_mode = "driving"
         
         # 성능 향상을 위한 히스토리 관리
         self.path_history = collections.deque(maxlen=10)
@@ -909,11 +911,11 @@ class PurePursuit(Node):
         self.lookahead_pose_pub = self.create_publisher(PoseStamped, '/lookahead_pose', 10)
         
         # Subscribers
-        # self.create_subscription(Path, '/local_path', self.path_callback, 10)
+        self.create_subscription(Path, '/local_path', self.path_callback, 10)
 
-        self.create_subscription(Path, '/active_path', self.path_callback, 10)
+        # self.create_subscription(Path, '/active_path', self.path_callback, 10)
         self.create_subscription(ErpStatusMsg, '/erp42_status', self.status_callback, 10)
-        self.create_subscription(String, '/controller_mode', self.mode_callback, 10)
+        # self.create_subscription(String, '/controller_mode', self.mode_callback, 10)
 
     
     
@@ -1019,19 +1021,19 @@ class PurePursuit(Node):
             self._publish_stop()
             self._clear_lookahead_visuals()
 
-    def mode_callback(self, msg: String):
-        self.controller_mode = msg.data
+    # def mode_callback(self, msg: String):
+    #     self.controller_mode = msg.data
         
-        if msg.data == "parking":
-            # 주차 모드: 더 보수적인 파라미터
-            self.current_lfd_gain = 1.5      # 더 짧은 lookahead
-            self.current_speed_limit = 30    # 더 낮은 속도
-            self.current_max_steer = 15.0    # 더 작은 최대 조향각
-        else:
-            # 일반 모드: 기본 파라미터
-            self.current_lfd_gain = self.lookahead_params.gain
-            self.current_speed_limit = self.control_params.speed_cmd_straight
-            self.current_max_steer = self.vehicle_params.max_steer_deg
+    #     if msg.data == "parking":
+    #         # 주차 모드: 더 보수적인 파라미터
+    #         self.current_lfd_gain = 1.5      # 더 짧은 lookahead
+    #         self.current_speed_limit = 30    # 더 낮은 속도
+    #         self.current_max_steer = 15.0    # 더 작은 최대 조향각
+    #     else:
+    #         # 일반 모드: 기본 파라미터
+    #         self.current_lfd_gain = self.lookahead_params.gain
+    #         self.current_speed_limit = self.control_params.speed_cmd_straight
+    #         self.current_max_steer = self.vehicle_params.max_steer_deg
     
     
     def _is_data_fresh(self) -> bool:

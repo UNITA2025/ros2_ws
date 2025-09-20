@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'global_path_pub_node = erp42_path.global_path_pub:main',
+            'parking_path_pub_node = erp42_path.parking_path_pub:main',
             'gps_map_pub_node = erp42_path.gps_map_pub:main',
             'local_pub_node = erp42_path.local_pub:main',
             'erp42_control_node = erp42_path.erp42_control:main',
