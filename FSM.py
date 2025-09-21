@@ -80,12 +80,31 @@ class PathManager(Node):
                     self.active_path_pub.publish(self.parking_path)
 
         elif self.current_mode == "parking":
+            self.pakring_steer_duration = 3.0  # 주차 예상 시간
+            self.parking_foward_duration = 3.0 # 주차 후 전진 예상 시간
+            self.parking_start_time = time.time()
             if self._parking_done():
                 self.current_mode = "reverse_out"
                 self.reverse_start_time = time.time()
                 self._publish_mode()
                 self.get_logger().info("✅ Parking done → Reverse start")
-
+            elif self.parking_start_time < self.pakring_steer_duration : # 주차 중에는 계속 주차 경로 명령
+                self.pakring_steer_cmd()
+            elif self.parking_foward_start_time < self.parking_foward_duration: # 주차 후 전진
+                cmd = ErpCmdMsg()
+                cmd.gear = 1  # 전진
+                cmd.speed = 70
+                cmd.steer = 0
+                cmd.brake = 0
+                self.cmd_pub.publish(cmd)
+            else: # 주차 후 전진 완료
+                cmd = ErpCmdMsg()
+                cmd.gear = 1  # 전진
+                cmd.speed = 0
+                cmd.steer = 0
+                cmd.brake = 100
+                self.cmd_pub.publish(cmd)
+            
         elif self.current_mode == "reverse_out":
             elapsed = time.time() - self.reverse_start_time
             if elapsed < self.reverse_duration:
@@ -116,6 +135,15 @@ class PathManager(Node):
         msg = String()
         msg.data = self.current_mode
         self.mode_pub.publish(msg)
+
+    def pakring_steer_cmd(self):
+        cmd = ErpCmdMsg()
+        cmd.gear = 1  # 전진
+        cmd.speed = 70
+        cmd.steer = 2000
+        cmd.brake = 0
+        self.cmd_pub.publish(cmd)
+        self.parking_foward_start_time = time.time()
 
     def publish_reverse_cmd(self):
         cmd = ErpCmdMsg()
