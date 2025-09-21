@@ -30,11 +30,14 @@ class PathManager(Node):
         self.parking_start_time = None
         self.parking_forward_start_time = None
         self.reverse_start_time = None
+        self.stop_start_time = None
+
+        self.parking_check = False
 
         # 파라미터
-        self.declare_parameter('parking_proximity_threshold', 1.0)   # 주차 진입 거리
+        self.declare_parameter('parking_proximity_threshold', 0.5)   # 주차 진입 거리
         self.declare_parameter('parking_complete_threshold', 1.0)    # 주차 완료 거리
-        self.declare_parameter('steer_duration', 3.0)                # 주차 조향 시간
+        self.declare_parameter('steer_duration', 1.3)                # 주차 조향 시간
         self.declare_parameter('forward_duration', 3.0)              # 주차 후 전진 시간
         self.declare_parameter('reverse_duration_s', 5.0)            # 후진 시간
         self.declare_parameter('reverse_speed', 30)                  # 후진 속도
@@ -46,6 +49,7 @@ class PathManager(Node):
         self.steer_duration = float(self.get_parameter('steer_duration').value)
         self.forward_duration = float(self.get_parameter('forward_duration').value)
         self.reverse_duration = float(self.get_parameter('reverse_duration_s').value)
+        self.stop_duration = 5.0
         self.reverse_speed = int(self.get_parameter('reverse_speed').value)
         self.reverse_steer = int(self.get_parameter('reverse_steer').value)
         self.reverse_brake = int(self.get_parameter('reverse_brake').value)
@@ -81,8 +85,9 @@ class PathManager(Node):
             return
 
         if self.current_mode == "normal":
-            if self._should_enter_parking():
+            if self._should_enter_parking() and not self.parking_check:
                 self.current_mode = "parking"
+                self.parking_check = True
                 self.parking_start_time = time.time()   # ✅ parking 시작 시점 기록
                 self._publish_mode()
                 self.get_logger().info("🚗 Parking start")
@@ -92,7 +97,7 @@ class PathManager(Node):
         elif self.current_mode == "parking":
             elapsed = time.time() - self.parking_start_time
             if elapsed < self.steer_duration:
-                self.pakring_steer_cmd()  # ✅ 조향 명령
+                self.parking_steer_cmd()  # ✅ 조향 명령
             else:
                 # 조향 끝나면 parking_forward로 전환
                 self.current_mode = "parking_forward"
@@ -106,10 +111,21 @@ class PathManager(Node):
                 self.publish_forward_cmd()
             else:
                 # 전진 끝나면 후진 시작
+                self.current_mode = "parking_stop"
+                self.stop_start_time = time.time()
+                self._publish_mode()
+                self.get_logger().info("↩ parking stop start")
+
+        elif self.current_mode == "parking_stop":
+            elapsed = time.time() - self.stop_start_time
+            if elapsed < self.stop_duration:
+                self.parking_stop_cmd()
+            else:
+                # 전진 끝나면 후진 시작
                 self.current_mode = "reverse_out"
                 self.reverse_start_time = time.time()
                 self._publish_mode()
-                self.get_logger().info("↩ Reverse start")
+                self.get_logger().info("↩ reverse_out start")
 
         elif self.current_mode == "reverse_out":
             elapsed = time.time() - self.reverse_start_time
@@ -136,18 +152,26 @@ class PathManager(Node):
         msg.data = self.current_mode
         self.mode_pub.publish(msg)
 
-    def pakring_steer_cmd(self):
+    def parking_steer_cmd(self):
         cmd = ErpCmdMsg()
         cmd.gear = 1  # 전진
-        cmd.speed = 70
+        cmd.speed = 30
         cmd.steer = 2000   # 조향 크게
         cmd.brake = 0
+        self.cmd_pub.publish(cmd)
+
+    def parking_stop_cmd(self):
+        cmd = ErpCmdMsg()
+        cmd.gear = 1  # 전진
+        cmd.speed = 0
+        cmd.steer = 0   # 조향 크게
+        cmd.brake = 200
         self.cmd_pub.publish(cmd)
 
     def publish_forward_cmd(self):
         cmd = ErpCmdMsg()
         cmd.gear = 1  # 전진
-        cmd.speed = 70
+        cmd.speed = 30
         cmd.steer = 0
         cmd.brake = 0
         self.cmd_pub.publish(cmd)
