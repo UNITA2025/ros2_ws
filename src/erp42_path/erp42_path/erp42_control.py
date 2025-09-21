@@ -915,7 +915,7 @@ class PurePursuit(Node):
 
         # self.create_subscription(Path, '/active_path', self.path_callback, 10)
         self.create_subscription(ErpStatusMsg, '/erp42_status', self.status_callback, 10)
-        # self.create_subscription(String, '/controller_mode', self.mode_callback, 10)
+        self.create_subscription(String, '/controller_mode', self.mode_callback, 10)
 
     
     

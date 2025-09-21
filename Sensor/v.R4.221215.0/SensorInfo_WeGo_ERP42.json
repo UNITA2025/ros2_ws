@@ -1,0 +1,11 @@
+{
+  "cameraList": [],
+  "Lidar3DList": [],
+  "Lidar2DList": [],
+  "GPSList": [],
+  "IMUList": [],
+  "RadarList": [],
+  "UltrasonicList": [],
+  "GroundTruthList": [],
+  "LightList": []
+}

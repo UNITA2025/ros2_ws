@@ -1,0 +1,5 @@
+Latitude : 37.2393160443404
+Longitude : 126.77356744085
+Altitude : 29.4136432442665
+EastOffset : 302459.942
+NorthOffset : 4122635.537

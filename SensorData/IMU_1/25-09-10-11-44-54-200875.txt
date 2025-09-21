@@ -1,0 +1,12 @@
+TimeStamp.Secs : 1757504694
+TimeStamp.nSecs : 752836096
+Orientation X : 0.00191476126201451
+Orientation Y : 0.0109875677153468
+Orientation Z : 0.99715656042099
+Orientation W : 0.0745277255773544
+Angular Velocity X : -0.000320684743559533
+Angular Velocity Y : -0.000212499619740336
+Angular Velocity Z : -0.000291987474779702
+Linear Acceleration X : 0.0194518300968002
+Linear Acceleration Y : 0.224726848013395
+Linear Acceleration Z : 9.80352863122557
