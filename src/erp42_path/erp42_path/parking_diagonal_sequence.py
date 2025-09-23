@@ -30,22 +30,22 @@ class ParkingSequenceNode(Node):
 
         # === 파라미터 (코드에서 직접 수정) ===
         # 시간 설정 (초)
-        self.steer_duration = 3.0      # 조향 시간
-        self.reverse_steer_duration = 3.0      # 조향 시간
-        self.forward_duration = 5.0    # 전진 시간
-        self.stop_duration = 5.0       # 정지 시간
-        self.reverse_duration = 5.0    # 후진 시간
+        self.steer_duration = 4.0      # 조향 시간
+        self.reverse_steer_duration = 1.5      # 조향 시간
+        self.forward_duration = 2.5    # 전진 시간
+        self.stop_duration = 3.0       # 정지 시간
+        self.reverse_duration = 3.0    # 후진 시간
         
         # 조향 설정
         self.steer_angle = 2000        # 조향각 (좌측)
         self.reverse_steer_angle = 0   # 후진 시 조향각
         
         # 속도 설정
-        self.forward_speed = 50        # 전진 속도
-        self.reverse_speed = 50        # 후진 속도
+        self.forward_speed = 100        # 전진 속도
+        self.reverse_speed = 100        # 후진 속도
         
         # 브레이크 설정
-        self.stop_brake = 200          # 정지 시 브레이크
+        self.stop_brake = 33          # 정지 시 브레이크
         
         # === 내부 변수 ===
         self.current_state = ParkingState.STEER  # 바로 시작
@@ -68,6 +68,7 @@ class ParkingSequenceNode(Node):
     def _log_parameters(self):
         """현재 파라미터 출력"""
         self.get_logger().info("=== Diagonal Parking Parameters ===")
+        self.get_logger().info(f"0. STOP     : {self.stop_duration}s, brake={self.stop_brake}")
         self.get_logger().info(f"1. STEER    : {self.steer_duration}s, angle={self.steer_angle}, speed={self.forward_speed}")
         self.get_logger().info(f"2. FORWARD  : {self.forward_duration}s, speed={self.forward_speed}")
         self.get_logger().info(f"3. STOP     : {self.stop_duration}s, brake={self.stop_brake}")
