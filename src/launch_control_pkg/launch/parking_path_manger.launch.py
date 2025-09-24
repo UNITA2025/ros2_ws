@@ -35,6 +35,8 @@ def generate_launch_description():
         output='screen'
     )
 
+    # erp42_path는 다른 곳에서 실행시키도록 해결. 재민님이 아마 실행 시킬거임.
+
     return LaunchDescription([
         global_path_node,
         parking_path_node,

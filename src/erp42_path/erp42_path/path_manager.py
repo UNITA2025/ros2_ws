@@ -54,7 +54,7 @@ class IntegratedParkingManager(Node):
         # === ROS Pub/Sub ===
         self.active_path_pub = self.create_publisher(Path, '/active_path', 10)
         self.state_pub = self.create_publisher(String, '/parking_state', 10)
-        self.mode_pub = self.create_publisher(String, '/controller_mode', 10)
+        self.mode_pub = self.create_publisher(String, '/control_mode', 10)
         self.cmd_pub = self.create_publisher(ErpCmdMsg, '/erp42_ctrl_cmd', 10)
 
         self.create_subscription(Odometry, '/odometry/local_enu', self.odom_cb, 10)
@@ -305,7 +305,7 @@ class IntegratedParkingManager(Node):
         """현재 모드 발행 (기존 시스템 호환성)"""
         msg = String()
         if self.current_state == ParkingState.NORMAL:
-            msg.data = "normal"
+            msg.data = "pure_pursuit"
         else:
             msg.data = "parking"
         self.mode_pub.publish(msg)

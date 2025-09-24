@@ -18,7 +18,7 @@ class ImprovedPathPublisher(Node):
         super().__init__('improved_path_pub')
 
         # === 기본 파라미터 선언 ===
-        self.declare_parameter('lookahead_pts_base', 50)           # 기본 lookahead 포인트 수
+        self.declare_parameter('lookahead_pts_base', 60)           # 기본 lookahead 포인트 수
         self.declare_parameter('lookahead_pts_max', 300)           # 최대 lookahead 포인트 수
         self.declare_parameter('lateral_limit', 10.0)              # 좌우 제한 (m)
         self.declare_parameter('forward_distance_limit', 50.0)     # 전방 거리 제한 (m)
@@ -36,7 +36,7 @@ class ImprovedPathPublisher(Node):
         self.declare_parameter('enable_speed_adaptation', True)    # 속도 기반 적응형 lookahead
         
         # === 디버깅 파라미터 ===
-        self.declare_parameter('enable_debug_logging', False)     # 디버그 로깅
+        self.declare_parameter('enable_debug_logging', True)     # 디버그 로깅
         self.declare_parameter('log_interval_sec', 2.0)          # 로그 출력 간격
 
         # 파라미터 로드
