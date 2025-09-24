@@ -74,7 +74,7 @@ class IntegratedParkingManager(Node):
         self.declare_parameter('parking_complete_threshold', 1.0)
         
         # 시간 설정
-        self.declare_parameter('detection_stop_duration', 4.0)
+        self.declare_parameter('detection_stop_duration', 5.0)
 
         self.declare_parameter('steer_duration', 4.0)
         self.declare_parameter('forward_duration', 2.5)
@@ -91,8 +91,8 @@ class IntegratedParkingManager(Node):
         self.declare_parameter('reverse_speed', 100)
         
         # 브레이크 설정
-        self.declare_parameter('detection_stop_brake', 33)
-        self.declare_parameter('parking_stop_brake', 33)
+        self.declare_parameter('detection_stop_brake', 200)
+        self.declare_parameter('parking_stop_brake', 200)
 
     def _load_parameters(self):
         """파라미터 로드"""

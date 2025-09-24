@@ -50,7 +50,7 @@ class EgoCtrlCmdSender:
             acceleration: 목표 가속도 (cmd_type=3일 때 사용)
         """
         mode = struct.pack('b', 2)  # 1: KeyBoard / 2: AutoMode
-        gear = struct.pack('b', 2)  # 1: Parking / 2: Reverse / 3: Neutral / 4: Drive
+        gear = struct.pack('b', 4)  # 1: Parking / 2: Reverse / 3: Neutral / 4: Drive
         cmd_type_packed = struct.pack('b', cmd_type)  # 1: Throttle / 2: Velocity / 3: Acceleration
         velocity_packed = struct.pack('f', velocity)
         acceleration_packed = struct.pack('f', acceleration)
@@ -135,18 +135,18 @@ class Erp42CtrlToUdpVelocity(Node):
         # target_velocity_mps = float(msg.speed) * (1000.0 / 3600.0) * 10
         target_velocity_mps = map_range(float(msg.speed), 0, 200, 0.0, 30.0)
 
-        target_brake_mps = map_range(float(msg.brake), 0, 200, 0.0, 30.0)
+        target_brake_mps = map_range(float(msg.brake), 0, 33, 0.0, 30.0)
 
 
         # 브레이크는 단순히 무시 (MORAI Velocity 모드에선 throttle/brake 직접 안 씀)
         steering = map_range(msg.steer, -2000, 2000, -1.0, 1.0)
 
         # Velocity 모드로 UDP 전송
-        self.sender.send_velocity_command(
-            target_velocity=target_velocity_mps,
+        self.sender.send_throttle_command(
+            throttle=target_velocity_mps,
             steering=steering,
-            get_brake=target_brake_mps,
-            get_gear=msg.gear
+            brake=target_brake_mps,
+            gear= msg.gear
         )
 
         self.get_logger().info(

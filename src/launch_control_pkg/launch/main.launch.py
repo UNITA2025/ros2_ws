@@ -15,18 +15,18 @@ def generate_launch_description():
             name='local_pub',
             output='screen'
         ),
-        # Node(
-        #     package='erp42_path',
-        #     executable='erp42_control_node',
-        #     name='erp_control',
-        #     output='screen'
-        # ),        
         Node(
             package='erp42_path',
-            executable='marker_control_node',
-            name='marker_control',
+            executable='erp42_control_node',
+            name='erp_control',
             output='screen'
         ),
+        # Node(
+        #     package='erp42_path',
+        #     executable='marker_control_node',
+        #     name='marker_control',
+        #     output='screen'
+        # ),
         # Node(
         #     package='erp42_path',
         #     executable='gps_map_pub_node',

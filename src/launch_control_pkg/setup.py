@@ -11,6 +11,7 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         ('share/' + package_name + '/launch', ['launch/main.launch.py']),  # ← 추가
+        ('share/' + package_name + '/launch', ['launch/parking_path_manger.launch.py']),  # ← 추가
     ],
     install_requires=['setuptools'],
     zip_safe=True,
