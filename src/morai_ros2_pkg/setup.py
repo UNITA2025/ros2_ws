@@ -1,6 +1,6 @@
 from setuptools import find_packages, setup
 
-package_name = 'parking_pkg'
+package_name = 'morai_ros2_pkg'
 
 setup(
     name=package_name,
@@ -19,12 +19,8 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'global_path_pub_node = parking_pkg.global_path_pub:main',
-            'parking_path_pub_node = parking_pkg.parking_path_pub:main',
-            'path_manager = parking_pkg.path_manager:main',
-            'parking_diagonal_sequence = parking_pkg.parking_diagonal_sequence:main',
-            'parking_parallel_sequence = parking_pkg.parking_parallel_sequence:main',
-            'plusspeedpark1 = parking_pkg.plusspeedpark1:main',
+            'morai_to_erp42_status = morai_ros2_pkg.morai_to_erp42_status:main',
+            'erp_ctrl_cmd_to_udp = morai_ros2_pkg.epr_ctrl_cmd_to_udp:main',
         ],
     },
 )

@@ -7,7 +7,7 @@ from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Path
 
 ### path.txt 경로
-file_txt = os.path.expandvars('${HOME}/ros2_ws/src/parking_pkg/resource/park1_morai.txt')
+file_txt = os.path.expandvars('${HOME}/ros2_ws_for_morai/src/parking_pkg/resource/global_morai.txt')
 ###
 
 class ReadPathPublisher(Node):
@@ -18,7 +18,7 @@ class ReadPathPublisher(Node):
 
         # 미리 한 번만 읽어서 보관
         self.global_path_msg = Path()
-        self.global_path_msg.header.frame_id = 'map'
+        self.global_path_msg.header.frame_id = 'odom'
         self.global_path_msg.poses = []
 
         # 원하는 경로 파일로 교체
@@ -47,7 +47,7 @@ class ReadPathPublisher(Node):
                     continue
 
                 pose = PoseStamped()
-                pose.header.frame_id = 'map'
+                pose.header.frame_id = 'odom'
                 pose.header.stamp = self.get_clock().now().to_msg()
                 pose.pose.position.x = x
                 pose.pose.position.y = y

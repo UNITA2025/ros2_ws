@@ -25,6 +25,7 @@ class ParkingState(Enum):
     REVERSE = "reverse"
     REVERSE_STEER = "reverse_steer"
     COMPLETED = "completed"
+    PARKING = 'parking'
 
 
 class IntegratedParkingManager(Node):
@@ -34,7 +35,8 @@ class IntegratedParkingManager(Node):
         super().__init__('integrated_parking_manager')
 
         # === 상태 및 데이터 ===
-        self.current_state = ParkingState.NORMAL
+        self.current_state = ParkingState.PARKING
+        # self.current_state = ParkingState.NORMAL
         self.current_position: Optional[Point] = None
         self.global_path: Optional[Path] = None
         self.parking_path: Optional[Path] = None
@@ -70,7 +72,7 @@ class IntegratedParkingManager(Node):
     def _declare_parameters(self):
         """ROS2 파라미터 선언"""
         # 거리 임계값
-        self.declare_parameter('parking_proximity_threshold', 0.5) # speed 200 : 5, 100: 3, 50: 1.5 maybe?
+        self.declare_parameter('parking_proximity_threshold', 0.1) # speed 200 : 5, 100: 3, 50: 1.5 maybe?
         self.declare_parameter('parking_complete_threshold', 1.0)
         
         # 시간 설정
@@ -146,6 +148,8 @@ class IntegratedParkingManager(Node):
     def parking_path_cb(self, msg: Path):
         """주차 경로 콜백"""
         self.parking_path = msg
+        if self.current_state == ParkingState.PARKING:
+            self.active_path_pub.publish(msg)
 
     # === 메인 FSM 루프 ===
     def main_loop(self):
@@ -157,14 +161,29 @@ class IntegratedParkingManager(Node):
         if self.state_start_time:
             elapsed = time.time() - self.state_start_time
 
-        if self.current_state == ParkingState.NORMAL:
-            self._handle_normal(elapsed)
-        elif self.current_state == ParkingState.DETECTION_STOP:
-            self._handle_detection_stop(elapsed)
-        elif self.current_state == ParkingState.STEER:
-            self._handle_steer(elapsed)
-        elif self.current_state == ParkingState.FORWARD:
-            self._handle_forward(elapsed)
+        # if self.current_state == ParkingState.NORMAL:
+        #     self._handle_normal(elapsed)
+        # elif self.current_state == ParkingState.DETECTION_STOP:
+        #     self._handle_detection_stop(elapsed)
+        # elif self.current_state == ParkingState.STEER:
+        #     self._handle_steer(elapsed)
+        # elif self.current_state == ParkingState.FORWARD:
+        #     self._handle_forward(elapsed)
+        # elif self.current_state == ParkingState.PARKING_STOP:
+        #     self._handle_parking_stop(elapsed)
+        # elif self.current_state == ParkingState.REVERSE:
+        #     self._handle_reverse(elapsed)
+        # elif self.current_state == ParkingState.REVERSE_STEER:
+        #     self._handle_reverse_steer(elapsed)
+        # elif self.current_state == ParkingState.COMPLETED:
+        #     self._handle_completed()
+
+        if self.current_state == ParkingState.PARKING:
+            self._should_parking_done(elapsed)
+        # elif self.current_state == ParkingState.STEER:
+        #     self._handle_steer(elapsed
+        # elif self.current_state == ParkingState.FORWARD:
+        #     self._handle_forward(elapsed)
         elif self.current_state == ParkingState.PARKING_STOP:
             self._handle_parking_stop(elapsed)
         elif self.current_state == ParkingState.REVERSE:
@@ -172,9 +191,17 @@ class IntegratedParkingManager(Node):
         elif self.current_state == ParkingState.REVERSE_STEER:
             self._handle_reverse_steer(elapsed)
         elif self.current_state == ParkingState.COMPLETED:
-            self._handle_completed()
+            self._handle_completed(elapsed)
+        elif self.current_state == ParkingState.NORMAL: # 알아서 주차 주행 
+            self._handle_normal(elapsed)
 
     # === 상태별 핸들러 ===
+    def _handle_parking(self, elapsed: float):
+        if self._should_parking_done() and not self.is_parking_started:
+            self._transition_to_state(ParkingState.PARKING_STOP)
+            self.is_parking_started = True
+            self.get_logger().info("🛑 PARKING_STOP")
+
     def _handle_normal(self, elapsed: float):
         """일반 주행 상태"""
         if self._should_enter_parking() and not self.is_parking_started:
@@ -232,8 +259,11 @@ class IntegratedParkingManager(Node):
         else:
             self._transition_to_state(ParkingState.COMPLETED)
 
-    def _handle_completed(self):
+    def _handle_completed(self, elapsed: float):
         """완료 상태 - 일반 주행으로 복귀"""
+        if elapsed < self.parking_stop_duration:
+            self._publish_parking_stop_cmd()
+            self._log_progress("Parking Reverse Done", elapsed, self.parking_stop_duration)
         self._transition_to_state(ParkingState.NORMAL)
         # self.is_parking_started = False
         if self.global_path:
@@ -247,6 +277,14 @@ class IntegratedParkingManager(Node):
             return False
         start = self.parking_path.poses[0].pose.position
         return self._dist(self.current_position, start) < self.parking_thr
+    
+
+    def _should_parking_done (self) -> bool:
+        """주차 종료 검사"""
+        if not self.parking_path or not self.parking_path.poses:
+            return False
+        end = self.parking_path.poses[-1].pose.position
+        return self._dist(self.current_position, end) < self.parking_thr
 
     # === 상태 전이 ===
     def _transition_to_state(self, new_state: ParkingState):
@@ -304,10 +342,11 @@ class IntegratedParkingManager(Node):
     def _publish_mode(self):
         """현재 모드 발행 (기존 시스템 호환성)"""
         msg = String()
-        if self.current_state == ParkingState.NORMAL:
+        if self.current_state == ParkingState.NORMAL or self.current_state == ParkingState.PARKING:
             msg.data = "pure_pursuit"
         else:
             msg.data = "parking"
+        # msg.data = "pure_pursuit"
         self.mode_pub.publish(msg)
 
     # === 유틸리티 함수 ===
