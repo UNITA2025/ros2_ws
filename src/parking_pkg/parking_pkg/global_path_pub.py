@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import os
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Path
 
+
 ### path.txt 경로
-file_txt = '/home/unita/ros2_ws_for_morai/src/erp42_path/erp42_path/global_morai.txt'
+file_txt = os.path.expandvars('${HOME}/ros2_ws/src/parking_pkg/resource/global_morai.txt')
 ###
 
 class ReadPathPublisher(Node):
     def __init__(self):
-        super().__init__('read_path_pub')
+        super().__init__('global_path_pub_node')
 
         self.global_path_pub = self.create_publisher(Path, '/global_path', 10)
 

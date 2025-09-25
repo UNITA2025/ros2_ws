@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+import os
 import rclpy
 from rclpy.node import Node
 from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Path
 
 ### path.txt 경로
-file_txt = '/home/unita/ros2_ws_for_morai/src/erp42_path/erp42_path/park1_morai.txt'
+file_txt = os.path.expandvars('${HOME}/ros2_ws/src/parking_pkg/resource/park1_morai.txt')
 ###
 
 class ReadPathPublisher(Node):

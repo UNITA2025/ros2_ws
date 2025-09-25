@@ -22,11 +22,11 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-        'global_path_pub = erp42_path.global_path_pub:main',
-        'local_pub = erp42_path.local_pub:main',
-        'erp_control = erp42_path.erp_control:main',
-        'gps_map_pub = erp42_path.gps_map_pub:main',
-   	    'marker_control_node = erp42_path.marker_control:main',
+        'global_path_pub = parking_pkg.global_path_pub:main',
+        'local_pub = parking_pkg.local_pub:main',
+        'erp_control = parking_pkg.erp_control:main',
+        'gps_map_pub = parking_pkg.gps_map_pub:main',
+   	    'marker_control_node = parking_pkg.marker_control:main',
         'ErpSerialHandler_pub = erp42_control.ErpSerialHandler:main',
         ],
     },
